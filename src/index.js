@@ -3,22 +3,26 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { SnackbarProvider } from "notistack";
-
-// Specify the target container ID
-const rootElement = document.getElementById("root");
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@mui/system";
+import theme from "./theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <SnackbarProvider
-      maxSnack={1}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "center",
-      }}
-      preventDuplicate
-    >
-      <App />
-    </SnackbarProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider
+          maxSnack={1}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          preventDuplicate
+        >
+          <App />
+        </SnackbarProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>,
-  rootElement 
+  document.getElementById("root")
 );

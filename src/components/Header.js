@@ -1,24 +1,84 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Avatar, Button, Stack } from "@mui/material";
-import Box from "@mui/material/Box";
+import { Button, Box, Avatar, Stack } from "@mui/material";
 import React from "react";
+import { useHistory, Link } from "react-router-dom";
 import "./Header.css";
 
-const Header = ({ children, hasHiddenAuthButtons }) => {
-    return (
-      <Box className="header">
-        <Box className="header-title">
-            <img src="logo_light.svg" alt="QKart-icon"></img>
-        </Box>
+const Header = ({ hasHiddenAuthButtons, children }) => {
+  const history = useHistory();
+  const username = localStorage.getItem("username");
+
+  const handleBackToExplore = () => {
+    history.push("/"); // Redirect to products page
+  };
+
+  const handleRegister = () => {
+    history.push("/register"); // Redirect to register page
+  };
+
+  const handleLogin = () => {
+    history.push("/login"); // Redirect to login page
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload(); // Redirect to products page
+  };
+
+  return (
+    <Box className="header">
+      <Box className="header-title">
+        <Link to="/">
+          <img src="logo_light.svg" alt="QKart-icon" />
+        </Link>
+      </Box>
+      {hasHiddenAuthButtons ? (
         <Button
           className="explore-button"
           startIcon={<ArrowBackIcon />}
           variant="text"
+          onClick={handleBackToExplore}
         >
           Back to explore
         </Button>
-      </Box>
-    );
+      ) : !username ? (
+        <>
+          <Box width="30vw">{children && children}</Box>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button
+              className="header-title"
+              variant="text"
+              onClick={handleLogin}
+            >
+              Login
+            </Button>
+            <Button
+              className="header-title"
+              variant="contained"
+              onClick={handleRegister}
+            >
+              Register
+            </Button>
+          </Stack>
+        </>
+      ) : (
+        <>
+          <Box width="30vw">{children && children}</Box>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Avatar alt={username} src="./" />
+            <p>{username}</p>
+            <Button
+              className="header-title"
+              variant="text"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </Stack>
+        </>
+      )}
+    </Box>
+  );
 };
 
 export default Header;

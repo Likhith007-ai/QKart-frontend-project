@@ -1,5 +1,5 @@
-import { Password } from "@mui/icons-material";
-import { Button, CircularProgress, Stack, TextField } from "@mui/material";
+// import { Password } from "@mui/icons-material";
+import { Button, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -7,27 +7,28 @@ import React, { useState } from "react";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
+import { useHistory } from "react-router-dom";
 import "./Register.css";
 
 const Register = () => {
+  const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const [formData,setFormData] = useState({
+  const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
   });
 
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement the register function
-    
-    const [loading,setLoading] = useState(false);
-    const handleFormData = (e) => {
-      setFormData({...formData,[e.target.name]: e.target.value});
-      // console.log(e.target.name, e.target.value);
-    };
-    const handleSubmit = async ()=> {
-          setLoading(true);
-          await register(formData);
-    }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   /**
    * Definition for register handler
    * - Function to be called when the user clicks on the register button or submits the register form
@@ -51,33 +52,30 @@ const Register = () => {
    *      "message": "Username is already taken"
    * }
    */
-   const register = async (formData) => {
-    
+  const handleRegister = async () => {
     const validationMessage = validateInput(formData);
-    // console.log("before validate", validationMessage)
     if (validationMessage) {
       enqueueSnackbar(validationMessage, { variant: "warning" });
       return;
     }
 
-    // console.log("after validate")
-  
     try {
       const response = await axios.post(`${config.endpoint}/auth/register`, {
         username: formData.username,
         password: formData.password,
       });
-  
+
       if (response.status === 201 && response.data.success) {
         enqueueSnackbar("Registered Successfully", { variant: "success" });
-        setLoading(false);
+        // Redirect to login page
+        history.push("/login");
       } else {
-        enqueueSnackbar("Registration failed. Please try again later.", { variant: "error" });
-        setLoading(false);
+        enqueueSnackbar("Registration failed. Please try again later.", {
+          variant: "error",
+        });
       }
     } catch (error) {
       enqueueSnackbar(error.response.data.message, { variant: "error" });
-      setLoading(false);
     }
   };
 
@@ -103,15 +101,15 @@ const Register = () => {
   const validateInput = (data) => {
     if (!data.username) {
       return "Username is required field";
-    }else if (data.username.length < 6) {
+    } else if (data.username.length < 6) {
       return "Username must be at least 6 characters";
-    }else if (!data.password) {
+    } else if (!data.password) {
       return "Password is a required field";
-    }else if (data.password.length < 6) {
+    } else if (data.password.length < 6) {
       return "Password must be at least 6 characters";
-    }else if (data.password !== data.confirmPassword) {
+    } else if (data.password !== data.confirmPassword) {
       return "Password do not match";
-    }else{
+    } else {
       return "";
     }
   };
@@ -131,12 +129,11 @@ const Register = () => {
             id="username"
             label="Username"
             variant="outlined"
-            title="Username"
             name="username"
             placeholder="Enter Username"
-            onChange={handleFormData}
+            value={formData.username}
+            onChange={handleChange}
             fullWidth
-            
           />
           <TextField
             id="password"
@@ -144,10 +141,11 @@ const Register = () => {
             label="Password"
             name="password"
             type="password"
-            helperText="Password must be atleast 6 characters length"
+            helperText="Password must be at least 6 characters long"
             fullWidth
+            value={formData.password}
             placeholder="Enter a password with minimum 6 characters"
-            onChange={handleFormData}
+            onChange={handleChange}
           />
           <TextField
             id="confirmPassword"
@@ -155,15 +153,20 @@ const Register = () => {
             label="Confirm Password"
             name="confirmPassword"
             type="password"
+            value={formData.confirmPassword}
             fullWidth
-            onChange={handleFormData}
+            onChange={handleChange}
           />
-          <Button className="button" variant="contained" onClick={()=> register(formData)}>
+          <Button
+            className="button"
+            variant="contained"
+            onClick={handleRegister}
+          >
             Register Now
           </Button>
           <p className="secondary-action">
             Already have an account?{" "}
-            <a className="link" href="#">
+            <a className="link" href="/login">
               Login here
             </a>
           </p>
