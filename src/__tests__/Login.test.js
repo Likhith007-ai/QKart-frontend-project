@@ -192,8 +192,6 @@ describe("Login Page", () => {
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent(/logged in/i);
-    
-    // expect(alert).toHaveTextContent(/Login Successfully!/i); 
   });
 
   it("should show error alert with message sent from backend if request fails", async () => {
