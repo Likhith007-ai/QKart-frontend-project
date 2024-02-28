@@ -1,7 +1,11 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, Box, Avatar, Stack } from "@mui/material";
+import { Button, Box, Avatar, Stack, InputAdornment,
+  TextField,
+  Container } from "@mui/material";
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
+import { Search, SentimentDissatisfied } from "@mui/icons-material";
+
 import "./Header.css";
 
 const Header = ({ hasHiddenAuthButtons, children }) => {
@@ -32,6 +36,27 @@ const Header = ({ hasHiddenAuthButtons, children }) => {
           <img src="logo_light.svg" alt="QKart-icon" />
         </Link>
       </Box>
+
+      {/* {children && (<div className="search-desktop">
+          <TextField
+            size="small"
+            fullWidth
+            InputProps={{
+              endAdornment: ( 
+                <InputAdornment position="end">
+                  <Search color="primary" />
+                </InputAdornment>
+              ),
+            }}
+            placeholder="Search for items/categories"
+            name="search"
+            onChange = {()=>{
+              return null;
+            }}
+          />
+        </div>)} */}
+
+
       {hasHiddenAuthButtons ? (
         <Button
           className="explore-button"
