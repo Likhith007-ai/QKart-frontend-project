@@ -8,8 +8,8 @@ import {
   Rating,
   Typography,
 } from "@mui/material";
+import { AddShoppingCartOutlined } from "@mui/icons-material"; // Corrected import statement
 import "./ProductCard.css";
-import AddShoppingCartOutlined from "@mui/icons-material/AddShoppingCartOutlined";
 
 const ProductCard = ({ product, handleAddToCart }) => {
   return (

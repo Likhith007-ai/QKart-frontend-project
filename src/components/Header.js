@@ -1,10 +1,8 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, Box, Avatar, Stack, InputAdornment,
-  TextField,
-  Container } from "@mui/material";
+import { Button, Box, Avatar, Stack } from "@mui/material";
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
-import { Search, SentimentDissatisfied } from "@mui/icons-material";
+// import { Search, SentimentDissatisfied } from "@mui/icons-material";
 
 import "./Header.css";
 

@@ -1,4 +1,6 @@
 import { Search, SentimentDissatisfied } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   CircularProgress,
   Grid,
@@ -6,15 +8,14 @@ import {
   TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
-import { config } from "../App";
-import Footer from "./Footer";
 import Header from "./Header";
+import Footer from "./Footer";
+import ProductCard from "./ProductCard";
 import "./Products.css";
 import Cart from "./Cart";
-import ProductCard from "./ProductCard";
+import { config } from "../App";
+
 
 // Definition of Data Structures used
 /**
@@ -290,3 +291,12 @@ const Products = () => {
   );
 };
 export default Products;
+
+
+//  {/* <Grid container spacing={2}>
+//  {products.map((product) => (
+//    <Grid item lg={3} md={6} sm={6} xs={6} key={product._id}>
+//      <ProductCard product={product} />
+//    </Grid>
+//  ))}
+//  </Grid>  */}
