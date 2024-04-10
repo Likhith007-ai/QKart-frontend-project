@@ -141,11 +141,9 @@ const Register = () => {
             label="Password"
             name="password"
             type="password"
-            helperText="Password must be at least 6 characters long"
+            helperText="Password must be atleast 6 characters length"
             fullWidth
-            value={formData.password}
             placeholder="Enter a password with minimum 6 characters"
-            onChange={handleChange}
           />
           <TextField
             id="confirmPassword"

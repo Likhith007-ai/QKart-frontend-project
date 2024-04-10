@@ -73,7 +73,6 @@ const Header = ({ hasHiddenAuthButtons, children }) => {
               variant="text"
               onClick={handleLogin}
             >
-              Login
             </Button>
             <Button
               className="header-title"
