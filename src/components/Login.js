@@ -1,5 +1,4 @@
-// import { Warning } from "@mui/icons-material";
-import { Button,Stack, TextField } from "@mui/material";
+import { Button, CircularProgress, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -11,25 +10,15 @@ import Header from "./Header";
 import "./Login.css";
 
 const Login = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+  const [FormData, setFormData] = useState({ username: "", password: "" });
+  const [loading, SetLoading] = useState(false);
 
-  const [formData,setFormData] = useState({
-    username:"",
-    password:"",
-  });
-
-  // const [loading,setLoading] = useState(false);
-
-  const handleFormData = (e) => {
-        setFormData({...formData,[e.target.name]: e.target.value})
+  const handleInput = (e) => {
+    const [key, value] = [e.target.name, e.target.value];
+    setFormData({ ...FormData, [key]: value });
   };
-
-  const login = async (formData) => {
-    if(!validateInput(formData)) return;
-  
-   
-
   // TODO: CRIO_TASK_MODULE_LOGIN - Fetch the API response
   /**
    * Perform the Login API call
@@ -51,38 +40,49 @@ const Login = () => {
    * HTTP 400
    * {
    *      "success": false,
-   *      "message": "Password is incorrect"
+   *      "message": "                                                                                    incorrect"
    * }
    *
    */
 
-      
-      // setLoading(true);
-      try {
-        const response = await axios.post(`${config.endpoint}/auth/login`, {
-          username: formData.username,
-          password: formData.password,
-        });
-        if (response.status === 201 && response.data.success) {
-          enqueueSnackbar("logged in", { variant: "success" });
-          persistLogin(response.data.token, response.data.username, response.data.balance);
-          history.push("/");
-        } else {
-          enqueueSnackbar("Login failed. Please try again later.", {
-            variant: "error",
-          });
-          // setLoading(false);
-        }
-      } catch (error) {
-        if(error.response.status === 400) {
-          enqueueSnackbar("Password is incorrect", {variant: "error"});
-        }else {
-          enqueueSnackbar("Login failed. Please try again later",{variant: "error"});
-        }
-        // setLoading(false);
+  const login = async (formData1) => {
+    console.log(formData1);
+    if (!validateInput(formData1)) {
+      return;
+    }
+    SetLoading(true);
+    try {
+      const response = await axios.post(
+        `${config.endpoint}/auth/login`,
+        formData1
+      );
+      console.log(response);
+
+      persistLogin(
+        response.data.token,
+        response.data.username,
+        response.data.balance
+      );
+
+      setFormData({ username: "", password: "" });
+
+      SetLoading(false);
+
+      enqueueSnackbar("logged in Succesfully", { variant: "success" });
+
+      history.push("/");
+    } catch (e) {
+      if (e.response && e.response.status === 400) {
+        enqueueSnackbar(e.response.data.message, { variant: "error" });
+      } else {
+        console.log(e);
+        enqueueSnackbar(
+          "Something went wrong. Check that the backend is running, reachable and returns valid JSON",
+          { variant: "error" }
+        );
       }
-    };
-  
+    }
+  };
 
   // TODO: CRIO_TASK_MODULE_LOGIN - Validate the input
   /**
@@ -101,15 +101,16 @@ const Login = () => {
    */
   const validateInput = (data) => {
     if (!data.username) {
-      enqueueSnackbar("Username is a required field", {variant:"warning"});
+      enqueueSnackbar("Username is a required field", { variant: "warning" });
       return false;
-    } else if (!data.password) {
-      enqueueSnackbar("Password is a required field", {variant:"warning"});
-      return false;
-    } else {
-      return true;
     }
+    if (!data.password) {
+      enqueueSnackbar("Password is a required field", { variant: "warning" });
+      return false;
+    }
+    return true;
   };
+
   // TODO: CRIO_TASK_MODULE_LOGIN - Persist user's login information
   /**
    * Store the login information so that it can be used to identify the user in subsequent API calls
@@ -127,9 +128,9 @@ const Login = () => {
    * -    `balance` field in localStorage can be used to store the balance amount in the user's wallet
    */
   const persistLogin = (token, username, balance) => {
-    localStorage.setItem("token",token);
-    localStorage.setItem("username",username);
-    localStorage.setItem("balance",balance);
+    localStorage.setItem("token", token);
+    localStorage.setItem("username", username);
+    localStorage.setItem("balance", balance);
   };
 
   return (
@@ -143,36 +144,41 @@ const Login = () => {
       <Box className="content">
         <Stack spacing={2} className="form">
           <h2 className="title">Login</h2>
-        <TextField
+          <TextField
             id="username"
             label="Username"
             variant="outlined"
+            title="Username"
             name="username"
             placeholder="Enter Username"
-            value={formData.username}
-            onChange={handleFormData}
-            full
+            fullWidth
+            onChange={handleInput}
           />
           <TextField
             id="password"
-            label="Password"
             variant="outlined"
-            type="password"
+            label="Password"
             name="password"
-            placeholder="Enter a password"
-            value={formData.password}
-            onChange={handleFormData}
+            type="password"
+            helperText="Password must be atleast 6 characters length"
             fullWidth
+            placeholder="Enter a password with minimum 6 characters"
+            onChange={handleInput}
           />
-          <Button
-            className="button"
-            variant="contained"
-            onClick={() => login(formData)}
-          >
-            Login to Qkart
-          </Button>
+          {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <CircularProgress size={25} color="primary" />
+            </Box>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={async () => await login(FormData)}
+            >
+              Login to QKart
+            </Button>
+          )}
           <p className="secondary-action">
-            Dont have an account?{" "}
+            Already have an account?{" "}
             <a className="link" href="/register">
               Register now
             </a>

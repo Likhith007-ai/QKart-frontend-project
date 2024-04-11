@@ -82,11 +82,11 @@ const Products = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${config.endpoint}/products`);
-      console.log(response.data);
+      // console.log(response.data);
       setLoading(false);
       setProducts(response.data);
       setFilteredProducts(response.data);
-      console.log(filteredProducts,"filteredProducts")
+      // console.log(filteredProducts,"filteredProducts")
     } catch (e) {
       setLoading(false);
       if (e.response && e.response.status === 500) {
@@ -162,15 +162,17 @@ const Products = () => {
     }, 500);
     setDebounceTimeout(timeout);
   };
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     performAPICall();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     fetchCart(token)
       .then((cartData) => generateCartItemsFrom(cartData, products))
       .then((cartItems) =>setItems(cartItems))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products])
 
   const isItemInCart = (items, productId) => {
