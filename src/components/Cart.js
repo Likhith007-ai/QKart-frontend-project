@@ -24,7 +24,7 @@ import "./Cart.css";
 
 /**
  * @typedef {Object} CartItem -  - Data on product added to cart
- *
+ * 
  * @property {string} name - The name or title of the product in cart
  * @property {string} qty - The quantity of product added to cart
  * @property {string} category - The category that the product belongs to
