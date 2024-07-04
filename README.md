@@ -57,7 +57,7 @@ To run this project locally, follow these steps:
 
 ## Deployment
 
-The frontend is currently deployed on [Vercel](https://vercel.com/likhith007-ais-projects/likhithsai7979-me-qkart-frontend-v2). You can access it at [QKart Frontend][https://your-netlify-url.com](https://likhithsai7979-me-qkart-frontend-v2-likhith007-ais-projects.vercel.app/).
+The frontend is currently deployed on [Vercel](https://vercel.com/likhith007-ais-projects/likhithsai7979-me-qkart-frontend-v2). You can access it at [QKart Frontend](https://likhithsai7979-me-qkart-frontend-v2-likhith007-ais-projects.vercel.app/).
 
 ## Contributing
 
